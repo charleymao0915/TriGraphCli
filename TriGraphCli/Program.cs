@@ -56,12 +56,19 @@ namespace TriGraphCli
             } while (loop);
         }
 
-        static void encrypt()
+        static void encrypt() //message encryption
         {
-
+            Console.WriteLine("What is the message?");
+            int count = OTP.Length;
+            bool EOM = false;
+            int i = 0;
+            while(!EOM)
+            {
+                for()
+            }
         }
 
-        static void decrypt()
+        static void decrypt() //message decryption
         {
 
         }
