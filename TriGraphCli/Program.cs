@@ -16,27 +16,27 @@ namespace TriGraphCli
     class Program
     {
         public static string OTP = ""; //One Time Phrase
-        static Dictionary<string, int> letterNum = new Dictionary<string, int>(); //This is will be the base format for each letter <'A',1>, <'B',2>.......<'Z',26>
+        static Dictionary<int, string> letterNum = new Dictionary<int, string>(); //This is will be the base format for each letter <'A',1>, <'B',2>.......<'Z',26>
 
         static void programInit() // Add key and value to the dictionary.
         {
             for(int i=65; i<=90; i++) //in ASCII 'A' is 65 and 'Z' is 90
             {
                 string letter = char.ConvertFromUtf32(i);
-                letterNum.Add(letter, i - 64);
+                letterNum.Add(i - 64, letter);
             }
             Console.WriteLine("System Initiation Completed.");
         }
 
         static void oneTimePhrase() //Ask fo4 OTP, convert too Upper Cases. Check to make sure it only contains letters and no repeated letters.
-        {
-            string phrase = (Console.ReadLine()).ToUpper();            //Convert to all Caps             
-            bool correctInput = Regex.IsMatch(phrase, @"^[A-Z]+$");    //Check for letters only
-            bool repeatedInput = Regex.IsMatch(phrase, @"(.)\1+");     //Check for any repeating letters
+        {        
+
             bool loop = true;
             do{
                 Console.WriteLine("Please Enter a One time Phrase: ");
-
+                string phrase = (Console.ReadLine()).ToUpper();            //Convert to all Caps     
+                bool correctInput = Regex.IsMatch(phrase, @"^[A-Z]+$");    //Check for letters only
+                bool repeatedInput = Regex.IsMatch(phrase, @"(.)\1+");     //Check for any repeating letters
                 if (correctInput)
                 {
                     if (repeatedInput)
@@ -59,18 +59,42 @@ namespace TriGraphCli
         static void encrypt() //message encryption
         {
             Console.WriteLine("What is the message?");
-            int count = OTP.Length;
-            bool EOM = false;
-            int i = 0;
-            while(!EOM)
+            string PT = Console.ReadLine();
+            string CT = "";
+            for(int j =0;j<PT.Length;j++)
             {
-                for()
+                int numSum = PT[j] - 64 + OTP[j % (OTP.Length)] - 64;
+                if (numSum < 28)
+                {
+                    CT += letterNum[28 - numSum];
+                }
+                else
+                {
+                    CT += letterNum[54 - numSum];
+                }
+                
             }
+            Console.WriteLine("Your Encrypted Message is: " + CT);
         }
 
         static void decrypt() //message decryption
         {
-
+            Console.WriteLine("What is the encrypted message?");
+            string CT = Console.ReadLine();
+            string PT = "";
+            for(int i =0; i<CT.Length; i++)
+            {
+                int numSum = CT[i] - 64 + OTP[i % (OTP.Length)] - 64;
+                if (numSum < 28)
+                {
+                    PT += letterNum[28 - numSum];
+                }
+                else
+                {
+                    PT += letterNum[54 - numSum];
+                }
+            }
+            Console.WriteLine("Your Clear Text Message is: " + PT);
         }
 
         static void Main(string[] args)
@@ -84,7 +108,7 @@ namespace TriGraphCli
                 {
                     case "1":
                         oneTimePhrase();
-                        
+                        encrypt();
                         break;
 
                     case "2":
