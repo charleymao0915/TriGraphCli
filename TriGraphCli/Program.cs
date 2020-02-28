@@ -41,7 +41,7 @@ namespace TriGraphCli
                 {
                     if (repeatedInput)
                     {
-                        Console.WriteLine("One Time Phrase CANNOT contain repeated letters (non-case sensitive)!");
+                        Console.WriteLine("For better seucurity, One Time Phrase CANNOT contain repeated letters (non-case sensitive)!");
                     }
                     else
                     {
@@ -58,9 +58,24 @@ namespace TriGraphCli
 
         static void encrypt() //message encryption
         {
-            Console.WriteLine("What is the message?");
-            string PT = Console.ReadLine();
-            string CT = "";
+            string PT = ""; //plain text
+            string CT = ""; //cypher text
+            bool loop = true;
+            do //using loop to ensure correct input, only letters and spaces allowed
+            {
+                Console.WriteLine("What is the message? No punctuations! Spell out the numbers.");
+                PT = (Console.ReadLine()).ToUpper();                     //Convert to all Caps     
+                bool correctInput = Regex.IsMatch(PT, @"^[A-Z\s]+$");    //Check for letters and spaces only
+                if (!correctInput)
+                {
+                    Console.WriteLine("Your message can only contain letters and spaces!");
+                }
+                else
+                {
+                    loop = false;
+                }                
+            } while (loop);
+            
             for(int j =0;j<PT.Length;j++)
             {
                 int numSum = PT[j] - 64 + OTP[j % (OTP.Length)] - 64;
@@ -79,10 +94,25 @@ namespace TriGraphCli
 
         static void decrypt() //message decryption
         {
-            Console.WriteLine("What is the encrypted message?");
-            string CT = Console.ReadLine();
+
+            string CT = "";
             string PT = "";
-            for(int i =0; i<CT.Length; i++)
+            bool loop = true;
+            do //using loop to ensure correct input, only letters allowed
+            {
+                Console.WriteLine("What is the encrypted message?");
+                CT = (Console.ReadLine()).ToUpper();                    //Convert to all Caps     
+                bool correctInput = Regex.IsMatch(CT, @"^[A-Z]+$");    //Check for letters only
+                if (!correctInput)
+                {
+                    Console.WriteLine("Encrypted messages can only contain letters!");
+                }
+                else
+                {
+                    loop = false;
+                }                
+            } while (loop);
+            for (int i =0; i<CT.Length; i++)
             {
                 int numSum = CT[i] - 64 + OTP[i % (OTP.Length)] - 64;
                 if (numSum < 28)
@@ -113,7 +143,7 @@ namespace TriGraphCli
 
                     case "2":
                         oneTimePhrase();
-
+                        decrypt();
                         break;
 
                     default:
