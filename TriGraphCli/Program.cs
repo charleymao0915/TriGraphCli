@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-//This is a tool to simplify the process of generating a Tri-graph. If you are wondering wha Tri-graph (AKA Diana Cryptosystem) is please go to https://en.wikipedia.org/wiki/One-time_pad 
+//This is a tool to simplify the process of generating a Tri-graph. If you are wondering wha Tri-graph (Similiar Diana Cryptosystem) is please go to https://en.wikipedia.org/wiki/One-time_pad 
 //This Method has been used by the U.S. Forces since Vietnam War.
 //It involves an One-Time pad thus it is very hard to break.
 
@@ -26,9 +26,33 @@ namespace TriGraphCli
                 letterNum.Add(i - 64, letter);
             }
             Console.WriteLine("System Initiation Completed.");
+            
+            //Printing a Trigraph still need to fix
+            int verticalCounter = 0;
+            for(int i = 0; i< 78; i++)
+            {
+                if(i%3==0)
+                {
+                    Console.WriteLine((char)(verticalCounter+65) + "   " + "A B C D E F G H I J K L M N O P Q R S T U V W X Y Z");
+                    verticalCounter++;
+                }else if(i%3==1)
+                {   
+                    Console.Write("    ");
+                    for(int j =53; j>27; j--)
+                    {
+                       
+                        Console.Write("{0} ",(char)(((j-verticalCounter-1)%26)+65));
+                        
+                    }
+                    Console.WriteLine();
+                }else
+                {
+                    Console.WriteLine();
+                }
+            }   
         }
 
-        static void oneTimePhrase() //Ask fo4 OTP, convert too Upper Cases. Check to make sure it only contains letters and no repeated letters.
+        static void oneTimePhrase() //Ask for OTP, convert too Upper Cases. Check to make sure it only contains letters and no repeated letters.
         {        
 
             bool loop = true;
@@ -59,12 +83,12 @@ namespace TriGraphCli
         static void encrypt() //message encryption
         {
             string PT = ""; //plain text
-            string CT = ""; //cypher text
+            string CT = ""; //cipher text
             bool loop = true;
             do //using loop to ensure correct input, only letters and spaces allowed
             {
                 Console.WriteLine("What is the message? No punctuations! Spell out the numbers.");
-                PT = (Console.ReadLine()).ToUpper();                     //Convert to all Caps     
+                PT = Console.ReadLine().Replace(" ","XX").ToUpper();                     //Convert to all Caps and replace spaces with XX   
                 bool correctInput = Regex.IsMatch(PT, @"^[A-Z\s]+$");    //Check for letters and spaces only
                 if (!correctInput)
                 {
@@ -75,6 +99,7 @@ namespace TriGraphCli
                     loop = false;
                 }                
             } while (loop);
+            
             
             for(int j =0;j<PT.Length;j++)
             {
@@ -132,7 +157,7 @@ namespace TriGraphCli
             bool keepGoing = true;
             programInit();
             do {
-                Console.WriteLine("Welcome to TriGraphCli. For Encryption enter 1; For Decryption Enter 2; To exit press any other key.");
+                Console.WriteLine("Welcome to TriGraphCli. Please enter your option: \n1. Encryption; \n2. Decryption; \nTo exit press any other key.");
                 string mainOption = Console.ReadLine();
                 switch (mainOption)
                 {
